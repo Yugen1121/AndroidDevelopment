@@ -35,6 +35,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.lazy.items
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Spring
+
+
 
 
 class MainActivity : ComponentActivity() {
@@ -66,7 +70,13 @@ fun MyApp(modifier: Modifier = Modifier, names: List<String> = List(1000){"$it"}
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     var showMore by rememberSaveable { mutableStateOf<Boolean>(false) }
     val extraPadding by animateDpAsState(
-        if (showMore) 48.dp else 0.dp
+        if (showMore) 48.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+
+
     )
     Surface(color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp)) {
