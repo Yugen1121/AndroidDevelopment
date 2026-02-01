@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.lazy.items
+import androidx.compose.animation.core.animateDpAsState
 
 
 class MainActivity : ComponentActivity() {
@@ -64,9 +65,12 @@ fun MyApp(modifier: Modifier = Modifier, names: List<String> = List(1000){"$it"}
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     var showMore by rememberSaveable { mutableStateOf<Boolean>(false) }
+    val extraPadding by animateDpAsState(
+        if (showMore) 48.dp else 0.dp
+    )
     Surface(color = MaterialTheme.colorScheme.primary,
         modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp)) {
-        Row (modifier = modifier.fillMaxWidth().padding(24.dp).padding(bottom = if(showMore) 48.dp else 0.dp)) {
+        Row (modifier = modifier.fillMaxWidth().padding(24.dp).padding(bottom = extraPadding)) {
             Column(modifier = modifier.weight(1f)) {
                 Text("Hello")
                 Text(text = name)
