@@ -37,6 +37,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.Spring
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.ui.res.stringResource
+import androidx.compose.animation.animateContentSize
+import com.example.myapplication.ui.theme.MyApplicationTheme
 
 
 
@@ -45,7 +53,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp(modifier = Modifier.fillMaxSize())
+            MyApplicationTheme {
+                MyApp(modifier = Modifier.fillMaxSize())
+            }
         }
     }
 }
@@ -69,23 +79,27 @@ fun MyApp(modifier: Modifier = Modifier, names: List<String> = List(1000){"$it"}
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     var showMore by rememberSaveable { mutableStateOf<Boolean>(false) }
-    val extraPadding by animateDpAsState(
-        if (showMore) 48.dp else 0.dp,
-        animationSpec = spring(
-            dampingRatio = Spring.DampingRatioMediumBouncy,
-            stiffness = Spring.StiffnessLow
-        )
+    Surface(
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp),
+        ) {
+        Column(modifier = modifier.fillMaxWidth().padding(24.dp).animateContentSize(
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessLow
+            )
+        )) {
+            Row(modifier = modifier.fillMaxWidth().padding(bottom = 24.dp)) {
+                Column(modifier = modifier.weight(1f)) {
+                    Text("Hello")
+                    Text(text = name)
 
-
-    )
-    Surface(color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(vertical = 8.dp, horizontal = 4.dp)) {
-        Row (modifier = modifier.fillMaxWidth().padding(24.dp).padding(bottom = extraPadding)) {
-            Column(modifier = modifier.weight(1f)) {
-                Text("Hello")
-                Text(text = name)
+                }
+                ElivatedButton(showMore, { showMore = !showMore })
             }
-            ElivatedButton(showMore, {showMore = !showMore})
+            if (showMore){
+                Text("Hello knads aklsdslaknda laknsdlasnd laksnd lksan dklsan dnjw edka d adjenoaodnaklnwd wa dkwa")
+            }
         }
     }
 
@@ -93,10 +107,16 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun ElivatedButton(showMore: Boolean, onToggle: () -> Unit, modifier: Modifier = Modifier){
-        Button (onClick = onToggle, colors = ButtonDefaults
-            .buttonColors(containerColor = Color.White, contentColor = Color.Blue)) {
-            Text(if(showMore) "Show less" else "Show more")
-        }
+    IconButton(onClick = onToggle) {
+        Icon(
+            imageVector = if (showMore) Filled.KeyboardArrowUp else Filled.KeyboardArrowDown,
+            contentDescription = if (showMore) {
+                stringResource(R.string.show_less)
+            } else {
+                stringResource(R.string.show_more)
+            }
+        )
+    }
 }
 
 
